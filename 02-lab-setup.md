@@ -25,8 +25,15 @@ Use only the IOS XE 8k/9k single instance reservable sandbox for this lab. Run c
 
 **Throughout this lab:** Commands marked with  should be run on your Ansible control machine (terminal/workstation), NOT on the IOS XE device.
 
+<!-- Remove after cl us -->
+```bash
+echo "QAWSedrf9531" | sudo openconnect https://devnetsandbox-usw1-reservation.cisco.com:21140 --user=ailiesiu --passwd-on-stdin &
+```
+
+<!-- ADD back after cl us 26
+
 **Connect to Your Sandbox**
-- Open a new terminal tab in your editor using the + symbol. Use the credentials from your reservation email or the I/O tab in your reservation window 
+- Open a new terminal tab in your editor using the + symbol. Use the credentials from your reservation email or the I/O tab in your reservation window  -->
 
 ---
 
