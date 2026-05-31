@@ -42,14 +42,14 @@ Keep this handy as you work through the lab:
 | View file contents | `cat filename.yml` | Display entire file |
 | Check first lines | `head -5 filename.yml` | Show first 5 lines |
 | Edit file in lab editor | Open file from Explorer panel | Edit directly in the browser/workstation editor |
-| Update sandbox credentials | Open `src/inventory/hosts.yml` in Explorer | Replace placeholders with your sandbox host/user/password |
+| Update sandbox credentials | Open `inventory/hosts.yml` in Explorer | Replace placeholders with your sandbox host/user/password |
 | Create directory | `mkdir dirname` | Make a new folder |
 | Validate YAML | `python3 -c "import yaml; yaml.safe_load(open('file.yml'))"` | Check YAML syntax |
 
 **File Creation Pattern Used in This Lab:**
 
 ```
-cat <<EOF > src/filename.yml
+cat <<EOF > filename.yml
 [content goes here]
 EOF
 ```
@@ -242,13 +242,13 @@ Now create subdirectories:
 
 ```bash
 # Create subdirectories for organization
-mkdir -p ~/src/inventory ~/src/playbooks ~/src/vars
+mkdir -p inventory playbooks vars
 ```
 
 **What these directories are for:**
-- `~/src/inventory/` - Device inventory and credentials
-- `~/src/playbooks/` - Ansible playbooks for NETCONF, RESTCONF, gNMI
-- `~/src/vars/` - Configuration variables (BGP, interfaces, telemetry)
+- `inventory/` - Device inventory and credentials
+- `playbooks/` - Ansible playbooks for NETCONF, RESTCONF, gNMI
+- `vars/` - Configuration variables (BGP, interfaces, telemetry)
 
 ###  Verify Directory Structure
 
@@ -259,9 +259,9 @@ ls -lh
 
 **Example output (note the date will vary):**
 ```
-drwxr-xr-x  2 user user 4096 May  7 10:30 src/inventory
-drwxr-xr-x  2 user user 4096 May  7 10:30 src/playbooks
-drwxr-xr-x  2 user user 4096 May  7 10:30 src/vars
+drwxr-xr-x  2 user user 4096 May  7 10:30 inventory
+drwxr-xr-x  2 user user 4096 May  7 10:30 playbooks
+drwxr-xr-x  2 user user 4096 May  7 10:30 vars
 ```
 
 ###  Complete Directory Tree
@@ -307,7 +307,7 @@ First, create the inventory file with placeholder values.
 
 
 ```bash
-cat <<EOF > src/inventory/hosts.yml
+cat <<EOF > inventory/hosts.yml
 all:
   children:
     iosxe_devices:
@@ -334,7 +334,7 @@ EOF
 ```
 
 **What this command does:**
-- Creates `src/inventory/hosts.yml` file
+- Creates `inventory/hosts.yml` file
 - Contains placeholders that you'll replace in the next step
 - Uses YAML format (indentation matters!)
 
@@ -352,7 +352,7 @@ Now edit the file to add your **actual** credentials from your sandbox reservati
 - `<SANDBOX_PASSWORD>` - Your password (from reservation email or in your DevNet Sandbox Reservation I/O tab)
 
 **Update using the Learning Lab editor (recommended):**
-1. In the Explorer panel, open `src/inventory/hosts.yml`.
+1. In the Explorer panel, open `inventory/hosts.yml`.
 2. Find the three placeholder lines under `sandbox:`.
 3. Replace placeholders with your real values:
   - Replace `<SANDBOX_HOSTNAME>` with your hostname
@@ -368,7 +368,7 @@ Now edit the file to add your **actual** credentials from your sandbox reservati
  
 ```bash
 # View the file (your password will be visible - this is OK for lab purposes)
-cat src/inventory/hosts.yml
+cat inventory/hosts.yml
 ```
 
 **Expected output** (with YOUR actual values, not placeholders):
@@ -406,7 +406,7 @@ all:
 
 ```bash
 # Validate YAML format (if this runs without errors, you're good!)
-python3 -c "import yaml; yaml.safe_load(open('src/inventory/hosts.yml'))" && echo "✓ Valid YAML syntax"
+python3 -c "import yaml; yaml.safe_load(open('inventory/hosts.yml'))" && echo "✓ Valid YAML syntax"
 ```
 
 **If successful, you'll see:** `✓ Valid YAML syntax`  
@@ -416,7 +416,7 @@ python3 -c "import yaml; yaml.safe_load(open('src/inventory/hosts.yml'))" && ech
 
 **Problem:** File still has `<PLACEHOLDERS>`
 
-**Solution:** Reopen `src/inventory/hosts.yml` in the Learning Lab editor and replace the three placeholder values with your sandbox credentials, then save.
+**Solution:** Reopen `inventory/hosts.yml` in the Learning Lab editor and replace the three placeholder values with your sandbox credentials, then save.
 
 **Problem:** YAML syntax error
 
@@ -440,9 +440,9 @@ pwd
 Create the Ansible configuration file:
 
 ```bash
-cat <<EOF > src/ansible.cfg
+cat <<EOF > ansible.cfg
 [defaults]
-inventory = src/inventory/hosts.yml
+inventory = inventory/hosts.yml
 host_key_checking = False
 timeout = 60
 gathering = explicit
@@ -464,16 +464,16 @@ EOF
 
 ```bash
 # Check file exists
-ls -lh src/ansible.cfg
+ls -lh ansible.cfg
 
 # View contents
-cat src/ansible.cfg
+cat ansible.cfg
 ```
 
 **Expected output:**
 ```
 [defaults]
-inventory = src/inventory/hosts.yml
+inventory = inventory/hosts.yml
 host_key_checking = False
 timeout = 60
 gathering = explicit
@@ -503,8 +503,8 @@ ansible all --list-hosts
 
  **If you see errors:**
 - Check that `ansible.cfg` exists in current directory
-  - If needed, run with `ANSIBLE_CONFIG=src/ansible.cfg`
-- Check that `src/inventory/hosts.yml` has valid YAML syntax
+  - If needed, run with `ANSIBLE_CONFIG=ansible.cfg`
+- Check that `inventory/hosts.yml` has valid YAML syntax
 - Verify you're in the `~/src/ansible-iosxe-api` directory
 
 ---
@@ -544,9 +544,9 @@ Now you're ready to explore the three API protocols with Ansible.
 - Configure BGP using Cisco-IOS-XE-native YANG model
 - Use `ansible.netcommon.netconf_config` module
 - **Files you'll create:**
-  - `src/vars/bgp_config.yml` - BGP parameters
-  - `src/playbooks/netconf_bgp.yml` - Main BGP configuration playbook
-  - `src/playbooks/verify_bgp.yml` - Verification playbook
+  - `vars/bgp_config.yml` - BGP parameters
+  - `playbooks/netconf_bgp.yml` - Main BGP configuration playbook
+  - `playbooks/verify_bgp.yml` - Verification playbook
 - Jump Here Now: [03-netconf-native.md](03-netconf-native.md)
 
 **Section 4: RESTCONF + Sandbox with Native/IETF Models**
@@ -554,10 +554,10 @@ Now you're ready to explore the three API protocols with Ansible.
 - Configure VLANs, interfaces, QoS for sandbox
 - Use Cisco-IOS-XE-native and IETF standard models
 - **Files you'll create:**
-  - `src/vars/sandbox_config.yml` - Sandbox configuration data
-  - `src/playbooks/restconf_sandbox_deploy.yml` - Deployment playbook
-  - `src/playbooks/restconf_native_model.yml` - Native model examples
-  - `src/playbooks/restconf_ietf_model.yml` - IETF model examples
+  - `vars/sandbox_config.yml` - Sandbox configuration data
+  - `playbooks/restconf_sandbox_deploy.yml` - Deployment playbook
+  - `playbooks/restconf_native_model.yml` - Native model examples
+  - `playbooks/restconf_ietf_model.yml` - IETF model examples
 - Jump Here Now: [05-restconf-native.md](./05-restconf-native.md)
 
 **Section 5: gNMI + OSPF with Cisco Native Models**
@@ -565,15 +565,15 @@ Now you're ready to explore the three API protocols with Ansible.
 - Configure OSPF routing with Cisco-IOS-XE-ospf model
 - Use `cisco.gnmi` collection
 - **Files you'll create:**
-  - `src/vars/ospf_config.yml` - OSPF parameters
-  - `src/playbooks/gnmi_ospf_native.yml` - Native OSPF configuration
+  - `vars/ospf_config.yml` - OSPF parameters
+  - `playbooks/gnmi_ospf_native.yml` - Native OSPF configuration
 - Jump Here Now: [07-gnmi-native.md](./07-gnmi-native.md)
 
 **Section 6: gNMI + OSPF with OpenConfig Models**
 - Configure OSPF using openconfig-network-instance model
 - Compare gNMI Native vs OpenConfig approaches
 - **Files you'll create:**
-  - `src/playbooks/gnmi_ospf_openconfig.yml` - OpenConfig OSPF playbook
+  - `playbooks/gnmi_ospf_openconfig.yml` - OpenConfig OSPF playbook
 - Jump Here Now: [08-gnmi-openconfig.md](./08-gnmi-openconfig.md)
 
 ### Remember
